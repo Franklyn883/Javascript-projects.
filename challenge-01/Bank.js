@@ -39,6 +39,7 @@ const accountNumberGenerator = new AccountNumberGenerator();
 class BankAccount {
     accountNumberGenerator = new AccountNumberGenerator();
     static accounts = [];
+    static minimumBal = 100
     constructor(owner, balance = 0) {
         this.owner = owner;
         this.balance = balance;
@@ -56,14 +57,15 @@ class BankAccount {
             });
         }
 
-        for (let account of accounts) {
-            let info = `Account Number:${
+        for (let account of this.accounts) {
+            let accountInfo = `\t Account Number:${
                 account.accountNumber
             }, Name:${formatOwnerName(account.owner)}, Balance:${
                 account.getBalance
-            }`;
-         
+            }\n`;
+        console.log(accountInfo);
         }
+       
     }
     /**
      * @param {number} amount
@@ -75,12 +77,13 @@ class BankAccount {
      * @param {number} amount
      */
     withdraw(amount) {
-        if (this.balance - 100 >= amount) {
+        if ((this.balance - BankAccount .minimumBal) >= amount) {
             return (this.balance -= amount);
         } else {
-            return `Your account account balance is ${this.balance}, and is too low to withdraw ${amount}. You must have a minimum of N100.00 in your account`;
+            return `Your account account balance is ${this.balance}, and is too low to withdraw ${amount}. You must have a minimum of ${BankAccount.minimumBal} in your account`;
         }
     }
+    
     get getBalance() {
         return this.balance.toLocaleString("en-NG", {
             style: "currency",
@@ -96,6 +99,4 @@ class BankAccount {
     }
 }
 
-
-
-export default BankAccount
+export default BankAccount;
