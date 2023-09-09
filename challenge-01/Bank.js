@@ -62,7 +62,7 @@ class BankAccount {
             }, Name:${formatOwnerName(account.owner)}, Balance:${
                 account.getBalance
             }`;
-            console.log(info);
+         
         }
     }
     /**
@@ -96,17 +96,6 @@ class BankAccount {
     }
 }
 
-const user1 = new BankAccount("John doe samuel", 1000000);
-const user2 = new BankAccount("Samuel Hanson", 1000000);
-const user3 = new BankAccount("James Bond");
-console.log(user1);
-console.log(user2);
-user1.deposit = 400;
 
-console.log(user1.withdraw(54599));
-console.log(user1.balance);
 
-console.log(user1.getBalance);
-console.log(user1);
-console.log(BankAccount.accounts);
-BankAccount.getAccountInfo();
+export default BankAccount

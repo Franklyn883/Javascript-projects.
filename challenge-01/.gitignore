@@ -1,0 +1,26 @@
+# Node.js
+node_modules/
+
+# Built files
+dist/
+bundle.js
+
+# Environment configuration
+.env
+
+# Visual Studio Code settings
+.vscode/
+
+# Editor-specific files
+*.swp
+*.swo
+*.swn
+*.swm
+
+# Log files
+*.log
+npm-debug.log*
+
+# Dependency directories
+/.pnp
+.pnp.js
