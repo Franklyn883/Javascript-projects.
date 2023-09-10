@@ -39,33 +39,40 @@ const accountNumberGenerator = new AccountNumberGenerator();
 class BankAccount {
     accountNumberGenerator = new AccountNumberGenerator();
     static accounts = [];
-    static minimumBal = 100
-    constructor(owner, balance = 0) {
+    constructor(owner, initialBalance = 0) {
         this.owner = owner;
-        this.balance = balance;
+        this.balance = initialBalance;
         this.accountNumber = accountNumberGenerator.generateAccountNumber();
         BankAccount.accounts.push(this);
     }
-    static getAccountInfo() {
-        let accounts = BankAccount.accounts;
-
-        function formatOwnerName(ownerName) {
+    static formatUserInfo() {
+        const formatOwnerName = (ownerName) => {
             return ownerName.replace(/\w\S*/g, (txt) => {
                 return (
                     txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
                 );
             });
-        }
+        };
+        const formatAmount = (amount) => {
+            return amount.toLocaleString("en-NG", {
+                style: "currency",
+                currency: "NGN",
+            });
+        };
+        return {formatOwnerName,formatAmount}
+    }
 
+    static getAccountInfo() {
+        const formatUserInfo = BankAccount.formatUserInfo()
+        let accounts = BankAccount.accounts;
         for (let account of this.accounts) {
             let accountInfo = `\t Account Number:${
                 account.accountNumber
-            }, Name:${formatOwnerName(account.owner)}, Balance:${
+            }, Name:${formatUserInfo.formatOwnerName(account.owner)}, Balance:${
                 account.getBalance
             }\n`;
-        console.log(accountInfo);
+            console.log(accountInfo);
         }
-       
     }
     /**
      * @param {number} amount
@@ -77,18 +84,38 @@ class BankAccount {
      * @param {number} amount
      */
     withdraw(amount) {
-        if ((this.balance - BankAccount .minimumBal) >= amount) {
-            return (this.balance -= amount);
-        } else {
-            return `Your account account balance is ${this.balance}, and is too low to withdraw ${amount}. You must have a minimum of ${BankAccount.minimumBal} in your account`;
+        if (typeof amount == "number" && amount > 0) {
+            if (this.balance >= amount) {
+                return (this.balance -= amount);
+            } else {
+                return `Your account account balance is ${this.balance}, and is too low to withdraw ${amount}.`;
+            }
         }
+        return `Please enter a valid Amount`;
     }
-    
+
+    transfer(amount, targetAccount) {
+        const formatUserInfo = BankAccount.formatUserInfo()
+        if (typeof amount == "number" && amount > 0) {
+            if (this.balance > amount) {
+                this.balance -= amount;
+                targetAccount.balance += amount;
+
+                return ` Transfer successful, ${formatUserInfo.formatAmount(amount)} sent to ${formatUserInfo.formatOwnerName(
+                    targetAccount.owner
+                )} \n Balance : ${this.getBalance}`;
+            }
+            else{
+                return `Insufficient funds`
+            }
+
+        }
+        return `Please enter a valid Amount`
+    }
+
     get getBalance() {
-        return this.balance.toLocaleString("en-NG", {
-            style: "currency",
-            currency: "NGN",
-        });
+        const formatUserInfo = BankAccount.formatUserInfo()
+        return formatUserInfo.formatAmount(this.balance);
     }
     get closeAccount() {
         for (let account in this) {
