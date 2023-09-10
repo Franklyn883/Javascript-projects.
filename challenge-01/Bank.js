@@ -1,129 +1,61 @@
-class AccountNumberGenerator {
+import SavingsAccount from "./SavingsAccount.js";
+import CheckingAccount from "./CheckingAccount.js";
+
+class Bank {
     constructor() {
-        this.generatedNumbers = new Set(); // Store generated account numbers
+        this.accounts = [];
+    }
+    createAccount(type, owner, initialBalance) {
+        const account =
+            type === "Savings"
+                ? new SavingsAccount(owner, initialBalance)
+                : new CheckingAccount(owner, initialBalance);
+
+        this.accounts.push(account);
+        return account;
     }
 
-    generateAccountNumber() {
-        let attempts = 0;
-        while (attempts < 1000) {
-            // Try up to 1000 times to generate a unique number
-            const randomNum = this.generateRandomNumber();
-            const accountNumber = this.formatAccountNumber(randomNum);
+    deposit(account, amount) {
+        account.deposit(amount);
+    }
 
-            if (!this.generatedNumbers.has(accountNumber)) {
-                this.generatedNumbers.add(accountNumber);
-                return accountNumber;
-            }
-            attempts++;
+    withdraw(account, amount) {
+        account.withdraw(amount);
+    }
+    transfer(account, targetAccount, amount) {
+        return account.transfer(amount, targetAccount);
+    }
+
+    closeAccount(account) {
+        const index = this.accounts.indexOf(account);
+        if (index !== -1) {
+            this.accounts.splice(index, 1);
+            return `Account closed successfully `
         }
-
-        throw new Error("Unable to generate a unique account number."); // Error handling for rare collision scenarios
+        
     }
 
-    generateRandomNumber() {
-        return Math.floor(Math.random() * 9000000000) + 1000000000; // Generates a random 10-digit number
+    getBalance(account){
+        return account.getBalance
+    }
+    getAccountInfo(account) {
+        return account.getUserInfo();
     }
 
-    formatAccountNumber(number) {
-        return String(number);
-    }
-
-    get getAccountNumbers() {
-        return [this.generatedNumbers];
+     getNumberOfCustomer() {
+        
+        let savingsAccount = 0
+        let checkingAccount = 0
+       for(let account of this.accounts){
+        if(account instanceof SavingsAccount){
+           savingsAccount++ 
+        }
+        else{
+            checkingAccount++
+        }
+       }
+       let totalCustomers = checkingAccount + savingsAccount
+       return `Saving Accounts:${savingsAccount}\nChecking Accounts:${checkingAccount}\nTotal Accounts:${totalCustomers}`
     }
 }
-
-const accountNumberGenerator = new AccountNumberGenerator();
-
-//This handles all the main banking activities
-class BankAccount {
-    accountNumberGenerator = new AccountNumberGenerator();
-    static accounts = [];
-    constructor(owner, initialBalance = 0) {
-        this.owner = owner;
-        this.balance = initialBalance;
-        this.accountNumber = accountNumberGenerator.generateAccountNumber();
-        BankAccount.accounts.push(this);
-    }
-    static formatUserInfo() {
-        const formatOwnerName = (ownerName) => {
-            return ownerName.replace(/\w\S*/g, (txt) => {
-                return (
-                    txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
-                );
-            });
-        };
-        const formatAmount = (amount) => {
-            return amount.toLocaleString("en-NG", {
-                style: "currency",
-                currency: "NGN",
-            });
-        };
-        return {formatOwnerName,formatAmount}
-    }
-
-    static getAccountInfo() {
-        const formatUserInfo = BankAccount.formatUserInfo()
-        let accounts = BankAccount.accounts;
-        for (let account of this.accounts) {
-            let accountInfo = `\t Account Number:${
-                account.accountNumber
-            }, Name:${formatUserInfo.formatOwnerName(account.owner)}, Balance:${
-                account.getBalance
-            }\n`;
-            console.log(accountInfo);
-        }
-    }
-    /**
-     * @param {number} amount
-     */
-    set deposit(amount) {
-        return (this.balance += amount);
-    }
-    /**
-     * @param {number} amount
-     */
-    withdraw(amount) {
-        if (typeof amount == "number" && amount > 0) {
-            if (this.balance >= amount) {
-                return (this.balance -= amount);
-            } else {
-                return `Your account account balance is ${this.balance}, and is too low to withdraw ${amount}.`;
-            }
-        }
-        return `Please enter a valid Amount`;
-    }
-
-    transfer(amount, targetAccount) {
-        const formatUserInfo = BankAccount.formatUserInfo()
-        if (typeof amount == "number" && amount > 0) {
-            if (this.balance > amount) {
-                this.balance -= amount;
-                targetAccount.balance += amount;
-
-                return ` Transfer successful, ${formatUserInfo.formatAmount(amount)} sent to ${formatUserInfo.formatOwnerName(
-                    targetAccount.owner
-                )} \n Balance : ${this.getBalance}`;
-            }
-            else{
-                return `Insufficient funds`
-            }
-
-        }
-        return `Please enter a valid Amount`
-    }
-
-    get getBalance() {
-        const formatUserInfo = BankAccount.formatUserInfo()
-        return formatUserInfo.formatAmount(this.balance);
-    }
-    get closeAccount() {
-        for (let account in this) {
-            if (this.hasOwnProperty(account)) {
-                this[account] = null;
-            }
-        }
-    }
-}
-
-export default BankAccount;
+export default Bank;
