@@ -1,10 +1,11 @@
-import BankAccount from "./BankAccount";
+import BankAccount from "./Bank";
 
-class CheckingAccount extends BankAccount {
-    static accounts = [];
-    constructor(owner, initialBalance) {
-        super(owner, initialBalance);
-        CheckingAccount.accounts.push(this);
+class CheckingAccount extends BankAccount{
+    static accounts = []
+    constructor(owner,initialBalance){
+        super(owner,initialBalance)
+        CheckingAccount.accounts.push(this)
+
     }
 }
 
