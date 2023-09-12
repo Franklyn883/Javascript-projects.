@@ -30,29 +30,32 @@ class Bank {
         const index = this.accounts.indexOf(account);
         if (index !== -1) {
             this.accounts.splice(index, 1);
-            return `Account closed successfully `;
+            return `Account closed successfully `
         }
+        
     }
 
-    getBalance(account) {
-        return account.getBalance;
+    getBalance(account){
+        return account.getBalance
     }
     getAccountInfo(account) {
         return account.getUserInfo();
     }
 
-    getNumberOfCustomer() {
-        let savingsAccount = 0;
-        let checkingAccount = 0;
-        for (let account of this.accounts) {
-            if (account instanceof SavingsAccount) {
-                savingsAccount++;
-            } else {
-                checkingAccount++;
-            }
+     getNumberOfCustomer() {
+        
+        let savingsAccount = 0
+        let checkingAccount = 0
+       for(let account of this.accounts){
+        if(account instanceof SavingsAccount){
+           savingsAccount++ 
         }
-        let totalCustomers = checkingAccount + savingsAccount;
-        return `Saving Accounts:${savingsAccount}\nChecking Accounts:${checkingAccount}\nTotal Accounts:${totalCustomers}`;
+        else{
+            checkingAccount++
+        }
+       }
+       let totalCustomers = checkingAccount + savingsAccount
+       return `Saving Accounts:${savingsAccount}\nChecking Accounts:${checkingAccount}\nTotal Accounts:${totalCustomers}`
     }
 }
 export default Bank;
