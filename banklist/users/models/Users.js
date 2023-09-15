@@ -2,10 +2,11 @@ import EmailValidator from "./EmailValidator";
 class User {
     static #users = [];
 
-    constructor(username, email, password) {
+    constructor(username, password, email) {
         (this.username = username),
-            (this.email = null),
+           
             (this.password = password);
+            (this.email = null),
         this.isLoggedIn = false;
         User.#users.push(this);
     }
