@@ -1,26 +1,73 @@
 import EmailValidator from "./EmailValidator";
-class User {
-    static #users = [];
+import {ContactInfo,Address} from "./ContactInfo";
 
-    constructor(username, password, email) {
-        (this.username = username),
-           
-            (this.password = password);
-            (this.email = null),
-        this.isLoggedIn = false;
-        User.#users.push(this);
+class User {
+    static users = [];
+
+    constructor({firstName,lastName,dateOfBirth, sex, contactInfo, married=false}={}) {
+        this.firstName = firstName
+        this.lastName = lastName
+        this.dateOfBirth = dateOfBirth
+        this.contactInfo = contactInfo
+        this.isLoggedIn = true
+        this.isActive = true
+        this.isSuperUser = false
+        this.married = married
+        User.users.push(this)//stores the all instances of the class
+
+        //validate sex options
+        const validSexOptions = ["male","female","others"]
+
+        if(validSexOptions.includes(sex)){
+            this.sex = sex;
+        }else {
+            throw new Error('Invalid sex options')
+        }
+
     }
 
     /**
-     * @param {any} email
+     * @returns {any}
      */
-    set validateEmail(email) {
-        if (EmailValidator.isValidEmail(email)) {
-            this.email = email;
-        } else {
-            throw new Error("Invalid Email");
+    get getFullName(){
+        if(this.sex == 'male'){
+            return `Mr. ${this.firstName} ${this.lastName}`
+        }
+        else if(this.sex == 'female' && this.married){
+            return `Miss. ${this.firstName} ${this.lastName}`
+        }
+        else if(this.sex =='female' && !this.married){
+            return `Mrs. ${this.firstName} ${this.lastName}`
+        }
+        else{
+            return `Mx. ${this.firstName} ${this.lastName}`
         }
     }
+
+
+    logOut(){
+        return this.isLoggedIn =false
+    }
+
+    deactivate(){
+        return this.isActive = false
+    }
+
+    //get user address from the related class field
+    get getAddress(){
+        return `\t \tstreet: ${this.contactInfo.address.street}\n
+        city: ${this.contactInfo.address.city}\n
+        state: ${this.contactInfo.address.state}\n
+        country: ${this.contactInfo.address.country}
+        `
+    }
+
+    get getPhoneNumbers(){
+        return [this.contactInfo.phoneNumber].join(',')
+    }
+
+    
+
 }
 
 export default User;
