@@ -1,11 +1,18 @@
-
+import EmailValidator from "./EmailValidator"
 class ContactInfo{
+    
     constructor({address, email, phoneNumber}={}){
         this.address = address
-        this.email = email
         this.phoneNumber = phoneNumber
+      if(EmailValidator.isValidEmail(email)){
+        this.email = email
+      }
     }
+
+
 }
+
+
 
 class Address{
     constructor({postalCode,street,city,region,state,country="Nigeria"}={}){

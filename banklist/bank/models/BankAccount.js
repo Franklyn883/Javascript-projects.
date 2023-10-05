@@ -1,3 +1,5 @@
+import User from "../../users/models/Users";
+
 class AccountNumberGenerator {
     constructor() {
         this.generatedNumbers = new Set(); // Store generated account numbers
@@ -39,11 +41,14 @@ const accountNumberGenerator = new AccountNumberGenerator();
 class BankAccount {
     accountNumberGenerator = new AccountNumberGenerator();
     static accounts = [];
-    constructor(owner, initialBalance = 0) {
-        this.owner = owner;
+    constructor(user, initialBalance = 0) {
         this.balance = initialBalance;
+        this.owner = user
         this.accountNumber = accountNumberGenerator.generateAccountNumber();
         BankAccount.accounts.push(this);
+
+        //to allow the bank class take the user class and as a parameter
+        
     }
     static formatUserInfo() {
         const formatOwnerName = (ownerName) => {

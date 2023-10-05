@@ -29,6 +29,7 @@ class User {
     /**
      * @returns {any}
      */
+    //returns a formated strings of the user name
     get getFullName(){
         if(this.sex == 'male'){
             return `Mr. ${this.firstName} ${this.lastName}`
@@ -44,11 +45,11 @@ class User {
         }
     }
 
-
+//this method logouts out a user
     logOut(){
         return this.isLoggedIn =false
     }
-
+//this method deactivate a user accounts
     deactivate(){
         return this.isActive = false
     }
@@ -61,12 +62,12 @@ class User {
         country: ${this.contactInfo.address.country}
         `
     }
-
+//It returns the users phone numbers
     get getPhoneNumbers(){
         return [this.contactInfo.phoneNumber].join(',')
     }
 
-    
+
 
 }
 

@@ -3,31 +3,34 @@ class EmailValidator {
         //to remove empty spaces in emails.
         email = email.trim();
         if (email) {
-            // to ensure email only contains letters, numbers, underscores and dots.
-            let pattern = /^[a-zA-Z0-9_@.]+$/;
+          
+
             // To check if '@' occurs in the email.
             if (!email.includes("@")) {
-                return false;
+                throw new Error('Email should include "@"');
             }
             // To check if email has at least one character before and after the "@" symbol.
             if (email.startsWith("@") || email.endsWith("@")) {
-                return false;
+                throw new Error('Email must not start or end with "@"');
             }
             // To check if email does not start or end with "."
             if (email.startsWith(".") || email.endsWith(".")) {
-                return false;
+                throw new Error('Email must not start or end with "."');
             }
+
             //To check if '@' occurs just once in email.
             let count = 0;
             for (let i in email) {
                 if (email[i] == "@") {
                     count++;
                     if (count > 1) {
-                        return false;
+                        throw new Error(
+                            "Email can only include one instance of '@'"
+                        );
                     }
                 }
             }
-            return pattern.test(email);
+            //to check if the email contails valid symbols
         }
 
         //To check if email has at least one character before the "@" symbol.
@@ -37,4 +40,4 @@ class EmailValidator {
     }
 }
 
-export default EmailValidator
+export default EmailValidator;
