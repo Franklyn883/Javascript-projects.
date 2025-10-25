@@ -2,7 +2,8 @@ import User from "../../users/models/Users";
 
 class AccountNumberGenerator {
     constructor() {
-        this.generatedNumbers = new Set(); // Store generated account numbers
+        this.generatedNumbers = new Set(); // Store generated account numbers 
+        // without duplicate
     }
 
     generateAccountNumber() {
@@ -43,12 +44,11 @@ class BankAccount {
     static accounts = [];
     constructor(user, initialBalance = 0) {
         this.balance = initialBalance;
-        this.owner = user
+        this.owner = user;
         this.accountNumber = accountNumberGenerator.generateAccountNumber();
         BankAccount.accounts.push(this);
 
         //to allow the bank class take the user class and as a parameter
-        
     }
     static formatUserInfo() {
         const formatOwnerName = (ownerName) => {
@@ -64,11 +64,11 @@ class BankAccount {
                 currency: "NGN",
             });
         };
-        return {formatOwnerName,formatAmount}
+        return { formatOwnerName, formatAmount };
     }
 
     static getAccountInfo() {
-        const formatUserInfo = BankAccount.formatUserInfo()
+        const formatUserInfo = BankAccount.formatUserInfo();
         for (let account of this.accounts) {
             let accountInfo = `\t Account Number:${
                 account.accountNumber
@@ -80,10 +80,14 @@ class BankAccount {
     }
 
     //Get the information of a single user
-    getUserInfo(){
-        const formatUserInfo = BankAccount.formatUserInfo()
-        const userInfo = `\t Account Number:${this.accountNumber} name: ${formatUserInfo.formatOwnerName(this.owner)}, Balance :${this.getBalance} `
-        return userInfo
+    getUserInfo() {
+        const formatUserInfo = BankAccount.formatUserInfo();
+        const userInfo = `\t Account Number:${
+            this.accountNumber
+        } name: ${formatUserInfo.formatOwnerName(this.owner)}, Balance :${
+            this.getBalance
+        } `;
+        return userInfo;
     }
     /**
      * @param {number} amount
@@ -106,26 +110,26 @@ class BankAccount {
     }
 
     transfer(amount, targetAccount) {
-        const formatUserInfo = BankAccount.formatUserInfo()
+        const formatUserInfo = BankAccount.formatUserInfo();
         if (typeof amount == "number" && amount > 0) {
             if (this.balance > amount) {
                 this.balance -= amount;
                 targetAccount.balance += amount;
 
-                return ` Transfer successful, ${formatUserInfo.formatAmount(amount)} sent to ${formatUserInfo.formatOwnerName(
+                return ` Transfer successful, ${formatUserInfo.formatAmount(
+                    amount
+                )} sent to ${formatUserInfo.formatOwnerName(
                     targetAccount.owner
                 )} \n Balance : ${this.getBalance}`;
+            } else {
+                return `Insufficient funds`;
             }
-            else{
-                return `Insufficient funds`
-            }
-
         }
-        return `Please enter a valid Amount`
+        return `Please enter a valid Amount`;
     }
 
     get getBalance() {
-        const formatUserInfo = BankAccount.formatUserInfo()
+        const formatUserInfo = BankAccount.formatUserInfo();
         return formatUserInfo.formatAmount(this.balance);
     }
     get closeAccount() {
